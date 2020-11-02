@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <style>
+    :root {
+      --accent-color: {{ config.extra.accent }};
+    --accent-color-light: {{ config.extra.accent_light }};
+    }
+  </style>
+
+  <meta name="theme-color" content="{{ config.extra.accent }}" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2305a081%22></rect><path fill=%22%23fff%22 d=%22M29.04 84.63L29.04 84.63Q18.58 84.63 12.84 78.19Q7.11 71.75 7.11 59.98L7.11 59.98Q7.11 47.89 12.93 41.30Q18.75 34.71 29.52 34.71L29.52 34.71Q32.99 34.71 36.46 35.45Q39.94 36.20 41.91 37.21L41.91 37.21L39.67 43.41Q37.26 42.44 34.40 41.80Q31.54 41.17 29.35 41.17L29.35 41.17Q14.67 41.17 14.67 59.89L14.67 59.89Q14.67 68.76 18.25 73.51Q21.83 78.26 28.86 78.26L28.86 78.26Q34.88 78.26 41.21 75.66L41.21 75.66L41.21 82.12Q36.38 84.63 29.04 84.63ZM92.89 83.75L85.60 83.75L85.60 52.59Q85.60 46.70 82.92 43.80Q80.23 40.90 74.52 40.90L74.52 40.90Q66.92 40.90 63.43 45.03Q59.93 49.17 59.93 58.57L59.93 58.57L59.93 83.75L52.64 83.75L52.64 15.37L59.93 15.37L59.93 36.07Q59.93 39.80 59.58 42.27L59.58 42.27L60.02 42.27Q62.17 38.79 66.15 36.79Q70.13 34.79 75.22 34.79L75.22 34.79Q84.06 34.79 88.47 38.99Q92.89 43.19 92.89 52.33L92.89 52.33L92.89 83.75Z%22></path></svg>" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+
+  {% if config.extra.gtag %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.extra.gtag }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ config.extra.gtag }}');
+  </script>
+  {% endif %}
+
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+
+  {% if config.twitter %}
+  <meta name="twitter:creator" content="@{{ config.twitter }}">
+  <meta name="twitter:site" content="@{{ config.twitter }}">
+  {% endif %}
+
+  {% if page.extra.thumbnail %}
+  <meta property="og:image" content="{{ get_url(path=page.path ~ page.extra.thumbnail) }}">
+  {% elif config.extra.default_og_image %}
+  <meta property="og:image" content="{{ get_url(path=config.extra.default_og_image) }}">
+  {% endif %}
+
+  {% block description %}
+  {% if page.description %}
+  <meta name="description" content="{{ page.description }}" />
+  <meta name="twitter:description" content="{{ page.description }}">
+  {% else %}
+  <meta name="description" content="{{ config.description }}" />
+  <meta name="twitter:description" content="{{ config.description}}">
+  {% endif %}
+  {% endblock description %}
+
+  {% if page.title %}
+  <meta name="twitter:title" content="{{ page.title }}">
+  {% else %}
+  <meta name="twitter:title" content="{{ config.title }}">
+  {% endif %}
+
+  {% for link in config.extra.nav %}
+  <link rel="prerender" href="{{ link.path }}" />
+  {% endfor %}
+
+  <link rel="prefetch" href="{{ resize_image(path=config.extra.profile_small, width=50, height=50, op="fill") }}" />
+
+  <title>
+    {% block title %}
+    {% if page.title %}
+    {{ page.title }}
+    {% else %}
+    {{ config.title }}
+    {% endif %}
+    {% endblock title %}
+  </title>
+
+  {% block head %}{% endblock head %}
+  {% block styles %}
+  <link rel="stylesheet" href="{{ get_url(path="mymain.css") | safe }}">
+  {% endblock styles %}
+  {% block posthead %}{% endblock posthead %}
+</head>
+<body>
+{% block header %}
+<header>
+  <a class="profile-icon" href="/">
+    <svg class="header-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="#05a081"></rect><path d="M29.74 83.47L29.74 83.47Q19.63 83.47 14.08 77.25Q8.54 71.03 8.54 59.64L8.54 59.64Q8.54 47.96 14.17 41.59Q19.80 35.22 30.20 35.22L30.20 35.22Q33.56 35.22 36.92 35.94Q40.27 36.66 42.18 37.64L42.18 37.64L40.02 43.63Q37.68 42.69 34.92 42.08Q32.16 41.46 30.03 41.46L30.03 41.46Q15.85 41.46 15.85 59.56L15.85 59.56Q15.85 68.14 19.31 72.73Q22.77 77.31 29.57 77.31L29.57 77.31Q35.39 77.31 41.50 74.81L41.50 74.81L41.50 81.05Q36.83 83.47 29.74 83.47ZM91.46 82.63L84.41 82.63L84.41 52.51Q84.41 46.81 81.82 44.01Q79.23 41.21 73.70 41.21L73.70 41.21Q66.35 41.21 62.98 45.20Q59.60 49.19 59.60 58.28L59.60 58.28L59.60 82.63L52.55 82.63L52.55 16.53L59.60 16.53L59.60 36.53Q59.60 40.14 59.26 42.52L59.26 42.52L59.69 42.52Q61.77 39.17 65.61 37.23Q69.46 35.30 74.38 35.30L74.38 35.30Q82.92 35.30 87.19 39.36Q91.46 43.42 91.46 52.25L91.46 52.25L91.46 82.63Z" fill="#ffffff"></path></svg>
+  </a>
+  <div class="header-title"><a href="/">Chris Hepner</a></div>
+  <nav>
+    {% for link in config.extra.nav %}
+    <a href="{{ link.path }}">{{ link.name }}</a>
+    {% endfor %}
+  </nav>
+</header>
+{% endblock header %}
+<main>
+  {% block content %} {% endblock content %}
+</main>
+</body>
+</html>
